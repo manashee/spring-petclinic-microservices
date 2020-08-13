@@ -39,7 +39,6 @@ pipeline{
 			// 		     }
 			// 		}
 			// 	}
-			}
 
 
 			// stage('Removing Docker image'){
