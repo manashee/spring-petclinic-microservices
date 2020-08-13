@@ -10,35 +10,35 @@ pipeline{
 
 		stages{
 
-			stage('SonarQube Code Analysis'){
-                      steps{
-                        	 withSonarQubeEnv('sonarqube'){
-								 sh './mvnw sonar:sonar'
-                             }
-                               timeout(time: 30, unit: 'MINUTES'){
-                                  waitForQualityGate abortPipeline: false
-                             }
-                      }
-                    }
+			// stage('SonarQube Code Analysis'){
+            //           steps{
+            //             	 withSonarQubeEnv('sonarqube'){
+			// 					 sh './mvnw sonar:sonar'
+            //                  }
+            //                    timeout(time: 30, unit: 'MINUTES'){
+            //                       waitForQualityGate abortPipeline: false
+            //                  }
+            //           }
+            //         }
 
 			stage('Building Docker image'){
 				steps{
 					
-					sh'./mvnw compile jib:dockerBuild -DBUILDIMAGE=${dockerimage}'
+					sh'./mvnw clean install -P buildDocker'
 
 				}
 			}
 
-			stage('publishing docker image to Docker hub'){
-				steps{
-					script {
-						withDockerRegistry(credentialsId: registryCredential, url: ''){
-							docker.image(dockerimage).push("${BUILD_NUMBER}")
-							docker.image(dockerimage).push("latest")
+			// stage('publishing docker image to Docker hub'){
+			// 	steps{
+			// 		script {
+			// 			withDockerRegistry(credentialsId: registryCredential, url: ''){
+			// 				docker.image(dockerimage).push("${BUILD_NUMBER}")
+			// 				docker.image(dockerimage).push("latest")
 
-					     }
-					}
-				}
+			// 		     }
+			// 		}
+			// 	}
 			}
 
 
